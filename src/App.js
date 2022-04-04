@@ -114,7 +114,11 @@ function App() {
   if (!loading && movies.length > 0) {
     content = (
       <section>
-        <MoviesList movies={movies} />
+        <MoviesList
+          movies={movies}
+          fetchMoviesHandler={fetchMoviesHandler}
+          successNotify={successNotify}
+        />
       </section>
     );
   }
