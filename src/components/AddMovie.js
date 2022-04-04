@@ -1,5 +1,8 @@
 import React, { useRef, useState } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 import classes from './AddMovie.module.css';
 
 function AddMovie(props) {
@@ -51,7 +54,10 @@ function AddMovie(props) {
       {formError && (
         <p className={classes['form-error']}>All fields are required</p>
       )}
-      <button>Add Movie</button>
+      <button type='submit'>
+        <span className='btn-text'>Add Movie</span>
+        <FontAwesomeIcon icon={faPlus} />
+      </button>
     </form>
   );
 }

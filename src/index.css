@@ -40,3 +40,12 @@ body {
 .loading-paragraph {
   margin-top: 0;
 }
+
+.buttons-section {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.btn-text {
+  margin-right: 10px;
+}

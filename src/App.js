@@ -7,6 +7,9 @@ import AddMovie from './components/AddMovie';
 // 3rd party components
 import Loader from 'react-spinners/PropagateLoader';
 import { ToastContainer, toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { faThList } from '@fortawesome/free-solid-svg-icons';
 
 // Project styles
 import './App.css';
@@ -224,9 +227,14 @@ function App() {
       <section>
         <AddMovie onAddMovie={addMovieHandler} />
       </section>
-      <section>
+      <section className='buttons-section'>
         <button onClick={() => fetchMoviesHandler('refresh')}>
-          Refresh movies list
+          <span className='btn-text'>Refresh movies list</span>
+          <FontAwesomeIcon icon={faArrowsRotate} />
+        </button>
+        <button>
+          <span className='btn-text'>Clear movies list</span>
+          <FontAwesomeIcon icon={faThList} />
         </button>
       </section>
       {content}
