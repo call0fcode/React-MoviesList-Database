@@ -100,19 +100,22 @@ function App() {
   }
 
   async function addMovieHandler(movie) {
-    const response = await fetch(
-      'https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies.json',
-      {
-        method: 'POST',
-        body: JSON.stringify(movie),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    try {
+      const response = await fetch(
+        'https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies.json',
+        {
+          method: 'POST',
+          body: JSON.stringify(movie),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-    const data = await response.json();
-    console.log(data);
+      if (response.ok) fetchMoviesHandler();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -130,7 +133,7 @@ function App() {
         <AddMovie onAddMovie={addMovieHandler} />
       </section>
       <section>
-        <button onClick={fetchMoviesHandler}>Fetch Movies from DB</button>
+        <button onClick={fetchMoviesHandler}>Refresh movies list</button>
       </section>
       {content}
     </React.Fragment>
