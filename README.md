@@ -4,7 +4,10 @@ Small practice created with [create-react-app](https://create-react-app.dev/) th
 the comunication between the frontend (React) and a database ([Firebase Realtime Database](https://firebase.google.com/docs/database) in this case)
 through the Firebase API takes place.
 
-For the development of the app the following React features have been implemented:
+You can add movies, fetch the movies list and delete movies on the database.
+
+For the development of the app the following React features and techniques have been implemented:
+
 - React hooks:
   - useState
   - useEffect
@@ -16,7 +19,7 @@ For the development of the app the following React features have been implemente
 The native JavaScript [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) has been used in order to communicate with the database (for fetching, adding o deleting data).
 
 See working app:
-[ReactMeals](https://c0c-reactmeals.netlify.app/)
+[Demo communication frontend <-> database](https://c0c-react-database-communication-demo.netlify.app/)
 
 ## Instructions to start the development environment:
 
@@ -35,4 +38,5 @@ npm run start
 ```
 
 ### Notes
+
 Production deployment of the application is done through [Netlify's continuous deployment](https://docs.netlify.com/site-deploys/create-deploys/#deploy-with-git) feature.
