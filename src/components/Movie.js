@@ -42,7 +42,7 @@ const Movie = props => {
       );
 
       props.successNotify('Movie successfully deleted from database');
-      props.fetchMoviesHandler();
+      props.fetchMoviesHandler('delete');
     } catch (error) {
       console.log(error);
     }

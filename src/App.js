@@ -50,7 +50,7 @@ function App() {
       progress: undefined,
     });
 
-  const fetchMoviesHandler = useCallback(async (buttonIsClicked = false) => {
+  const fetchMoviesHandler = useCallback(async action => {
     // Remove some posible previous error
     setError(null);
 
@@ -80,14 +80,26 @@ function App() {
         });
       }
 
-      if (buttonIsClicked) successNotify('Movies list updated!');
       setMovies(loadedMovies);
+      if (action === 'refresh') {
+        setTimeout(() => {
+          setLoading(false);
+          successNotify('Movies list updated!');
+        }, 1500);
+      }
     } catch (error) {
       setError(error);
+      return null;
     }
 
-    // Hide loading spinner in all cases (success or error)
-    setLoading(false);
+    // Hide loading spinner
+    if (action === 'delete' || action === 'add') {
+      setLoading(false);
+    } else {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
+    }
   }, []);
 
   useEffect(() => {
@@ -176,7 +188,7 @@ function App() {
         );
 
         successNotify('Movie successfully added to database');
-        fetchMoviesHandler();
+        fetchMoviesHandler('add');
       } catch (error) {
         console.log(error);
       }
@@ -213,7 +225,7 @@ function App() {
         <AddMovie onAddMovie={addMovieHandler} />
       </section>
       <section>
-        <button onClick={() => fetchMoviesHandler(true)}>
+        <button onClick={() => fetchMoviesHandler('refresh')}>
           Refresh movies list
         </button>
       </section>
