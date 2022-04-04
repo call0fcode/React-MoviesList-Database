@@ -8,17 +8,41 @@ import classes from './Movie.module.css';
 const Movie = props => {
   async function deleteHandler(movieID) {
     try {
-      const response = await fetch(
+      // Delete movie
+      await fetch(
         `https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies/${movieID}.json`,
         {
           method: 'DELETE',
         }
       );
 
-      if (response.ok) {
-        props.successNotify('Movie successfully deleted from database');
-        props.fetchMoviesHandler();
+      let moviesCount;
+
+      // Get the count of movies in database
+      try {
+        const response = await fetch(
+          'https://c0c-react-db-connection-default-rtdb.firebaseio.com/moviesCount.json'
+        );
+
+        moviesCount = await response.json();
+      } catch (error) {
+        console.log(error);
       }
+
+      // Update movies count
+      await fetch(
+        'https://c0c-react-db-connection-default-rtdb.firebaseio.com/moviesCount.json',
+        {
+          method: 'PUT',
+          body: JSON.stringify(moviesCount - 1),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      props.successNotify('Movie successfully deleted from database');
+      props.fetchMoviesHandler();
     } catch (error) {
       console.log(error);
     }

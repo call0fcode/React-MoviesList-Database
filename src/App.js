@@ -39,6 +39,16 @@ function App() {
       draggable: true,
       progress: undefined,
     });
+  const errorNotify = message =>
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 3500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   const fetchMoviesHandler = useCallback(async (buttonIsClicked = false) => {
     // Remove some posible previous error
@@ -123,25 +133,57 @@ function App() {
     );
   }
 
+  const MAX_MOVIES_IN_LIST = 5;
+
   async function addMovieHandler(movie) {
+    let moviesCount;
+
+    // Get the count of movies in database
     try {
       const response = await fetch(
-        'https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies.json',
-        {
-          method: 'POST',
-          body: JSON.stringify(movie),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        'https://c0c-react-db-connection-default-rtdb.firebaseio.com/moviesCount.json'
       );
-
-      if (response.ok) {
-        successNotify('Movie successfully added to database');
-        fetchMoviesHandler();
-      }
+      moviesCount = await response.json();
     } catch (error) {
       console.log(error);
+    }
+
+    // Check if movies limit has been reached before add new movie
+    if (moviesCount < MAX_MOVIES_IN_LIST) {
+      try {
+        // Add movie
+        await fetch(
+          'https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies.json',
+          {
+            method: 'POST',
+            body: JSON.stringify(movie),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        // Update movies count
+        await fetch(
+          'https://c0c-react-db-connection-default-rtdb.firebaseio.com/moviesCount.json',
+          {
+            method: 'PUT',
+            body: JSON.stringify(moviesCount + 1),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        successNotify('Movie successfully added to database');
+        fetchMoviesHandler();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      errorNotify(
+        `Limit of movies (${MAX_MOVIES_IN_LIST}) reached on database.`
+      );
     }
   }
 
