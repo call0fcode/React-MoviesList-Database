@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+// Project components
 import MoviesList from './components/MoviesList';
 import AddMovie from './components/AddMovie';
 
+// 3rd party components
 import Loader from 'react-spinners/PropagateLoader';
+import { ToastContainer, toast } from 'react-toastify';
 
-import { css } from '@emotion/react';
+// Project styles
 import './App.css';
 
+// 3rd party styles
+import { css } from '@emotion/react';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Project files
 import ReactLogo from './assets/React.svg';
 import FirebaseLogo from './assets/Firebase.svg';
 
@@ -21,7 +29,18 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchMoviesHandler = useCallback(async () => {
+  const successNotify = message =>
+    toast.success(message, {
+      position: 'top-right',
+      autoClose: 3500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const fetchMoviesHandler = useCallback(async (buttonIsClicked = false) => {
     // Remove some posible previous error
     setError(null);
 
@@ -51,6 +70,7 @@ function App() {
         });
       }
 
+      if (buttonIsClicked) successNotify('Movies list updated!');
       setMovies(loadedMovies);
     } catch (error) {
       setError(error);
@@ -112,7 +132,10 @@ function App() {
         }
       );
 
-      if (response.ok) fetchMoviesHandler();
+      if (response.ok) {
+        successNotify('Movie successfully added to database');
+        fetchMoviesHandler();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +143,17 @@ function App() {
 
   return (
     <React.Fragment>
+      <ToastContainer
+        position='top-right'
+        autoClose={3500}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className='title'>
         <p>Communicating Frontend with Database</p>
         <p>
@@ -133,7 +167,9 @@ function App() {
         <AddMovie onAddMovie={addMovieHandler} />
       </section>
       <section>
-        <button onClick={fetchMoviesHandler}>Refresh movies list</button>
+        <button onClick={() => fetchMoviesHandler(true)}>
+          Refresh movies list
+        </button>
       </section>
       {content}
     </React.Fragment>
