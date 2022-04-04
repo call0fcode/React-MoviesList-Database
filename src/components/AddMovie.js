@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import classes from './AddMovie.module.css';
 
@@ -7,10 +7,23 @@ function AddMovie(props) {
   const openingTextRef = useRef('');
   const releaseDateRef = useRef('');
 
+  const [formError, setFormError] = useState(false);
+
   function submitHandler(event) {
     event.preventDefault();
 
-    // could add validation here...
+    // Clear possible previous errors
+    setFormError(false);
+
+    // Validation
+    if (
+      titleRef.current.value.trim() === '' ||
+      openingTextRef.current.value.trim() === '' ||
+      releaseDateRef.current.value.trim() === ''
+    ) {
+      setFormError(true);
+      return null;
+    }
 
     const movie = {
       title: titleRef.current.value,
@@ -35,6 +48,9 @@ function AddMovie(props) {
         <label htmlFor='date'>Release Date</label>
         <input type='date' id='date' ref={releaseDateRef} />
       </div>
+      {formError && (
+        <p className={classes['form-error']}>All fields are required</p>
+      )}
       <button>Add Movie</button>
     </form>
   );

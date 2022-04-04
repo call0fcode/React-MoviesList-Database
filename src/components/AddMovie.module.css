@@ -24,3 +24,13 @@
   outline: none;
   border-color: #230052;
 }
+
+.form-error {
+  color: #c72323;
+  border: 2px solid #c72323;
+  font-weight: bold;
+  max-width: 50%;
+  margin: 20px auto;
+  padding: 0.5rem;
+  border-radius: 20px;
+}
