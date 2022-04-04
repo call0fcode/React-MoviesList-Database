@@ -202,6 +202,39 @@ function App() {
     }
   }
 
+  async function clearListHandler() {
+    try {
+      // Delete movies endpoint
+      await fetch(
+        `https://c0c-react-db-connection-default-rtdb.firebaseio.com/movies.json`,
+        {
+          method: 'DELETE',
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      // Update movies count
+      await fetch(
+        'https://c0c-react-db-connection-default-rtdb.firebaseio.com/moviesCount.json',
+        {
+          method: 'PUT',
+          body: JSON.stringify(0),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      successNotify('Movies list successfully cleared');
+      fetchMoviesHandler('delete');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <React.Fragment>
       <ToastContainer
@@ -232,7 +265,7 @@ function App() {
           <span className='btn-text'>Refresh movies list</span>
           <FontAwesomeIcon icon={faArrowsRotate} />
         </button>
-        <button>
+        <button onClick={clearListHandler}>
           <span className='btn-text'>Clear movies list</span>
           <FontAwesomeIcon icon={faThList} />
         </button>
